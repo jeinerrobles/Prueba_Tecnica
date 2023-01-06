@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.prueba_tecnica">
    <application
-        android:label="prueba_tecnica"
+        android:label="prueba tecnica"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
@@ -23,6 +23,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
+                <uses-permission android:name="android.permission.INTERNET"/>
             </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.

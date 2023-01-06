@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously, prefer_const_constructors, use_key_in_widget_constructors
+// ignore_for_file: use_build_context_synchronously, prefer_const_constructors, use_key_in_widget_constructors, non_constant_identifier_names, await_only_futures
 
 import 'dart:convert';
 
@@ -7,6 +7,7 @@ import 'package:prueba_tecnica/widget/messagewidget.dart';
 import 'package:flutter/material.dart'; 
 
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Registrar.dart';
 
@@ -17,7 +18,16 @@ class Login extends StatefulWidget {
   State<Login> createState() => _LoginState();
 }
 
+
+
 class _LoginState extends State<Login> {
+
+@override
+void initState(){
+super.initState();
+mostrar_datos();  
+}
+
   TextEditingController controlUser = TextEditingController();
   TextEditingController controlPassword = TextEditingController();
 
@@ -105,7 +115,12 @@ var response =  await http.post(url, body: {
     'usuario': usuario, 'contrasena': contrasena
   });
 var datos = jsonDecode(response.body);
+
 if(datos!= 0){
+
+
+guardar_datos(datos[0]["usuario"], datos[0]["contrasena"]);
+
  Navigator.of(context).pushReplacement(MaterialPageRoute(
                   builder: (context) => HomeScreen()));
 }else{
@@ -114,4 +129,32 @@ if(datos!= 0){
 }
  
 }
+
+Future<void> guardar_datos(usuario,contrasena) async{
+SharedPreferences prefs= await SharedPreferences.getInstance();
+
+await prefs.setString('usuario', usuario);
+await prefs.setString('contrasena', contrasena);
+
 }
+
+
+String usuario;
+String contrasena;
+
+Future<void> mostrar_datos() async{
+SharedPreferences prefs= await SharedPreferences.getInstance();
+
+usuario = await prefs.getString('usuario');
+contrasena = await prefs.getString('contrasena');
+
+if(usuario != ''){
+  if(usuario != null){
+    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  builder: (context) => HomeScreen()));
+  }
+}
+
+}
+}
+
